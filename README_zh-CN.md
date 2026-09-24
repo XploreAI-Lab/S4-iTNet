@@ -72,11 +72,19 @@ python train.py \
 
 ## 通道检测模型选择
 
-Stage 1 按验证集通道 F1、通道准确率和 detection loss 保存 checkpoint，位于 `model/stage1_selection_checkpoints/`，同时保存 `selection.json` 和通道二分类混淆矩阵。进入 Stage 2 的条件仍是验证 detection loss 的 patience。
+同一次 `train.py` 两阶段训练中，Stage 1 按验证集通道 F1、通道准确率和 detection loss 保存 checkpoint，位于 `model/stage1_selection_checkpoints/`；Stage 2 按验证集分类指标保存 checkpoint，位于 `model/selection_checkpoints/`。两个目录均保存 `selection.json` 和验证集混淆矩阵。进入 Stage 2 的条件是验证集 detection loss 的 patience。
 
-独立检测训练可在常规训练参数基础上增加 `--stage1-only`，使用配置中的 detection-loss 停止条件。复现历史实验还需要对应的原始配置和训练条件。评估时使用 `evaluate.py --detection-only` 并指定 `best_by_channel_f1.pth`。通道指标汇总所有窗口与通道组合，sigmoid 概率大于 0.5 时判为阳性；普通评估也会同时输出这些指标。
+评估这次训练中按通道 F1 选出的 Stage 1 checkpoint：
 
-报告的 Stage 1 结果（epoch 2，验证通道 F1 为 0.711083，测试通道准确率为 0.738516，测试通道 F1 为 0.776546）来自独立 Stage 1-only 实验。仓库提供的是按 weighted F1 选择的 Stage 2 权重，不包含该独立 Stage 1 权重。
+```bash
+python evaluate.py --data-root /path/to/processed_10s \
+  --checkpoint runs/s4_itnet/model/stage1_selection_checkpoints/best_by_channel_f1.pth \
+  --detection-only --device cuda:0 --output outputs/stage1_detection
+```
+
+通道指标汇总所有窗口与通道组合，sigmoid 概率大于 0.5 时判为阳性；常规评估也会输出通道检测指标。
+
+报告的 Stage 1 测试通道准确率为 0.738516、通道 F1 为 0.776546（epoch 2，验证通道 F1 为 0.711083），Stage 2 测试通道 F1 为 0.6938；两者是同一次两阶段训练中分别选出的 checkpoint 在测试集上的结果。Stage 2 checkpoint 按验证集 weighted F1 选出。仓库目前仅提供 Stage 2 的权重；运行 `train.py` 会生成两个阶段各自的 checkpoint。
 
 ## 模型评估
 

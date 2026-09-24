@@ -62,19 +62,19 @@ Settings are in [configs/s4_itnet_10s.json](configs/s4_itnet_10s.json). Use `--c
 
 ## Detection checkpoint selection
 
-Stage 1 saves checkpoints selected by validation channel F1, channel accuracy, and detection loss in `model/stage1_selection_checkpoints/`, together with `selection.json` and binary channel confusion matrices. The transition to Stage 2 still uses validation detection-loss patience.
+The two-stage `train.py` run saves Stage 1 checkpoints selected by validation channel F1, channel accuracy, and detection loss in `model/stage1_selection_checkpoints/`. It saves Stage 2 checkpoints selected by validation classification metrics in `model/selection_checkpoints/`. Each directory also contains `selection.json` and validation confusion matrices. The transition to Stage 2 uses validation detection-loss patience.
 
-For a separate detection-only training run, use `train.py --stage1-only` with the usual data, output, and device arguments. This mode uses the configured detection-loss stopping rule; reproducing a historical experiment also requires its original configuration and training conditions.
+Evaluate the channel-F1-selected Stage 1 checkpoint from the same two-stage run:
 
 ```bash
 python evaluate.py --data-root /path/to/processed_10s \
-  --checkpoint runs/stage1_only/model/stage1_selection_checkpoints/best_by_channel_f1.pth \
+  --checkpoint runs/s4_itnet/model/stage1_selection_checkpoints/best_by_channel_f1.pth \
   --detection-only --device cuda:0 --output outputs/stage1_detection
 ```
 
 Detection metrics pool all window-channel pairs and classify a channel as positive when its sigmoid probability is greater than 0.5. Normal evaluation also reports these metrics alongside seizure type classification metrics.
 
-The reported Stage 1 result (epoch 2, validation channel F1 0.711083, test channel accuracy 0.738516, and test channel F1 0.776546) comes from an independent Stage 1-only experiment. The published checkpoint is the Stage 2 weighted-F1-selected model; the independent Stage 1 checkpoint is not included.
+The reported Stage 1 test channel accuracy of 0.738516 and channel F1 of 0.776546 (epoch 2; validation channel F1 0.711083), and the Stage 2 test channel F1 of 0.6938, are evaluations of checkpoints selected at different stages of the same two-stage run. The Stage 2 checkpoint is selected by validation weighted F1. Only the Stage 2 weighted-F1-selected weights are included in this repository; running `train.py` creates both stage-specific checkpoints.
 
 ## Evaluation
 
