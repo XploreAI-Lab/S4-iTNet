@@ -1,0 +1,5 @@
+{
+  "synthetic": true,
+  "clinical_data": false,
+  "purpose": "Shape, label and pipeline checks only; not scientific performance evaluation"
+}

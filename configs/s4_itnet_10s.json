@@ -1,0 +1,30 @@
+{
+  "model": {
+    "seq_len": 2000,
+    "num_dy_gr": 8,
+    "d_model": 256,
+    "d_ff": 256,
+    "n_heads": 8,
+    "e_layers": 4,
+    "n_layers": 4,
+    "s4_d_model": 128,
+    "s4_dropout": 0.1,
+    "l_max": 2048,
+    "dropout": 0.3,
+    "activation": "gelu",
+    "num_channels": 22,
+    "num_classes": 4,
+    "batch_size": 16,
+    "num_workers": 0,
+    "learning_rate": 0.00005,
+    "train_epochs": 110,
+    "weight_decay": 0.0001,
+    "freeze_patience": 12,
+    "stage2_patience": 24,
+    "epoch_class_targets": [8000, 4000, 800, 800],
+    "sampler_seed": 20260627,
+    "s4_grad_max_bad_frac": 0.05,
+    "max_updates": 0
+  },
+  "seed": 2023
+}

@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+.idea/
+.keops_cache/
+outputs/
+runs/
+wandb/
+dataset/*
+!dataset/smoke_demo/
+!dataset/smoke_demo/**
+*.edf
+*.csv_bi

@@ -1,0 +1,13 @@
+split,array_index,event_id,patient_id,class_id
+train,0,synthetic_train_0,synthetic_train_0,0
+train,1,synthetic_train_1,synthetic_train_1,1
+train,2,synthetic_train_2,synthetic_train_2,2
+train,3,synthetic_train_3,synthetic_train_3,3
+val,0,synthetic_val_0,synthetic_val_0,0
+val,1,synthetic_val_1,synthetic_val_1,1
+val,2,synthetic_val_2,synthetic_val_2,2
+val,3,synthetic_val_3,synthetic_val_3,3
+test,0,synthetic_test_0,synthetic_test_0,0
+test,1,synthetic_test_1,synthetic_test_1,1
+test,2,synthetic_test_2,synthetic_test_2,2
+test,3,synthetic_test_3,synthetic_test_3,3
