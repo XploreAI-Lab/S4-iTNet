@@ -64,17 +64,17 @@ Settings are in [configs/s4_itnet_10s.json](configs/s4_itnet_10s.json). Use `--c
 
 The two-stage `train.py` run saves Stage 1 checkpoints selected by validation channel F1, channel accuracy, and detection loss in `model/stage1_selection_checkpoints/`. It saves Stage 2 checkpoints selected by validation classification metrics in `model/selection_checkpoints/`. Each directory also contains `selection.json` and validation confusion matrices. The transition to Stage 2 uses validation detection-loss patience.
 
-Evaluate the channel-F1-selected Stage 1 checkpoint from the same two-stage run:
+Evaluate the provided channel-F1-selected Stage 1 checkpoint:
 
 ```bash
 python evaluate.py --data-root /path/to/processed_10s \
-  --checkpoint runs/s4_itnet/model/stage1_selection_checkpoints/best_by_channel_f1.pth \
+  --checkpoint checkpoints/s4_itnet_10s_stage1_channel_f1.pth \
   --detection-only --device cuda:0 --output outputs/stage1_detection
 ```
 
 Detection metrics pool all window-channel pairs and classify a channel as positive when its sigmoid probability is greater than 0.5. Normal evaluation also reports these metrics alongside seizure type classification metrics.
 
-The reported Stage 1 test channel accuracy of 0.738516 and channel F1 of 0.776546 (epoch 2; validation channel F1 0.711083), and the Stage 2 test channel F1 of 0.6938, are evaluations of checkpoints selected at different stages of the same two-stage run. The Stage 2 checkpoint is selected by validation weighted F1. Only the Stage 2 weighted-F1-selected weights are included in this repository; running `train.py` creates both stage-specific checkpoints.
+The reported Stage 1 test channel accuracy of 0.738516 and channel F1 of 0.776546 (epoch 2; validation channel F1 0.711083), and the Stage 2 test channel F1 of 0.6938, are evaluations of checkpoints selected at different stages of the same two-stage run. The Stage 2 checkpoint is selected by validation weighted F1. Both weights are included in `checkpoints/`. A new `train.py` run writes the selected Stage 1 and Stage 2 weights to `runs/s4_itnet/model/stage1_selection_checkpoints/best_by_channel_f1.pth` and `runs/s4_itnet/model/selection_checkpoints/best_by_weighted_f1.pth`, respectively, when using the example output directory.
 
 ## Evaluation
 
